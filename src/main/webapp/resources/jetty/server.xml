@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+    <Set name="connectors">
+        <Array type="org.eclipse.jetty.server.Connector">
+            <Item>
+                <New class="org.eclipse.jetty.server.ServerConnector">
+                    <Arg>
+                        <Ref refid="Server"/>
+                    </Arg>
+                    <Set name="port">8080</Set>
+                </New>
+            </Item>
+        </Array>
+    </Set>
+
+    <!-- Логирование работы Jetty: стандартный поток вывода -->
+    <Call class="java.lang.System" name="setOut">
+        <Arg>
+            <New class="java.io.PrintStream">
+                <Arg>
+                    <New class="org.apache.commons.io.output.TeeOutputStream">
+                        <Arg>
+                            <Get class="java.lang.System" name="out"/>
+                        </Arg>
+                        <Arg>
+                            <New class="java.io.FileOutputStream">
+                                <Arg>${project.basedir}/logs/jetty-out.log</Arg>
+                            </New>
+                        </Arg>
+                    </New>
+                </Arg>
+            </New>
+        </Arg>
+    </Call>
+
+    <!-- Логирование работы Jetty: стандартный поток ошибок -->
+    <Call class="java.lang.System" name="setErr">
+        <Arg>
+            <New class="java.io.PrintStream">
+                <Arg>
+                    <New class="org.apache.commons.io.output.TeeOutputStream">
+                        <Arg>
+                            <Get class="java.lang.System" name="err"/>
+                        </Arg>
+                        <Arg>
+                            <New class="java.io.FileOutputStream">
+                                <Arg>${project.basedir}/logs/jetty-err.log</Arg>
+                            </New>
+                        </Arg>
+                    </New>
+                </Arg>
+            </New>
+        </Arg>
+    </Call>
+
+    <!-- Логирование HTTP-запросов, обрабатываемых инстансом Jetty -->
+    <Set name="handler">
+        <New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
+            <Set name="handlers">
+                <Array type="org.eclipse.jetty.server.Handler">
+                    <Item>
+                        <New id="ContextsStub" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
+                    </Item>
+
+                    <Item>
+                        <New id="ContextsAdmin" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
+                    </Item>
+
+                    <Item>
+                        <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/>
+                    </Item>
+
+                    <Item>
+                        <New id="RequestLog" class="org.eclipse.jetty.server.handler.RequestLogHandler">
+                            <Set name="requestLog">
+                                <New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
+                                    <Arg>${project.basedir}/logs/jetty-request.log</Arg>
+                                    <Set name="retainDays">7</Set>
+                                    <Set name="append">true</Set>
+                                    <Set name="extended">true</Set>
+                                    <Set name="LogTimeZone">GMT</Set>
+                                </New>
+                            </Set>
+                        </New>
+                    </Item>
+                </Array>
+            </Set>
+        </New>
+    </Set>
+
+</Configure>
