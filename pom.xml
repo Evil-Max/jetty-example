@@ -11,9 +11,9 @@
     <properties>
         <project.build.sourceencoding>UTF-8</project.build.sourceencoding>
         <spring.version>5.1.2.RELEASE</spring.version>
-        <jetty.version>9.2.22.v20170606</jetty.version>
+        <jetty.version>9.2.25.v20180606</jetty.version>
         <jstl.version>1.2</jstl.version>
-        <jetty.jsp.version>9.2.26.v20180806</jetty.jsp.version>
+        <jetty.jsp.version>9.2.25.v20180806</jetty.jsp.version>
         <jetty.context.folder>${project.build.directory}/classes/resources/jetty</jetty.context.folder>
         <jetty.server.xml>${jetty.context.folder}/server.xml</jetty.server.xml>
         <jetty.web.app.context.xml>${jetty.context.folder}/webAppContext.xml</jetty.web.app.context.xml>
